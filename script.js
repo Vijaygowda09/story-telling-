@@ -1,70 +1,133 @@
 document.addEventListener('DOMContentLoaded', () => {
     const storyContainer = document.getElementById('story-container');
-    
-    // Story data
+
+    // Define story segments
     const storyData = {
         start: {
-            text: "You find yourself in a dark forest. Do you wish to explore the forest or return to the village?",
+            text: "Welcome to your adventure! Choose a story to begin:",
             options: [
-                { text: "Explore the forest", next: 'forest' },
-                { text: "Return to the village", next: 'village' }
+                { text: "The Mysterious Forest", next: 'forest_start' },
+                { text: "The Haunted Castle", next: 'castle_start' },
+                { text: "The Space Odyssey", next: 'space_start' },
+                { text: "The Hidden Treasure", next: 'treasure_start' },
+                { text: "The Time Travel Adventure", next: 'time_start' },
+                { text: "The Secret Lab", next: 'lab_start' },
+                { text: "The Lost City", next: 'city_start' },
+                { text: "The Dragon's Lair", next: 'dragon_start' },
+                { text: "The Underwater Quest", next: 'underwater_start' },
+                { text: "The Desert Mirage", next: 'desert_start' }
             ]
         },
-        forest: {
-            text: "As you explore the forest, you come across a mysterious cave. Do you enter the cave or continue exploring?",
+        // Story 1: The Mysterious Forest
+        forest_start: {
+            text: "You are standing at the edge of a mysterious forest. Do you want to enter or go back?",
             options: [
-                { text: "Enter the cave", next: 'cave' },
-                { text: "Continue exploring", next: 'deep_forest' }
+                { text: "Enter the forest", next: 'forest_path' },
+                { text: "Go back", next: 'start' }
             ]
         },
-        village: {
-            text: "Back in the village, you see a bustling marketplace. Do you visit the marketplace or go to the town hall?",
+        forest_path: {
+            text: "As you walk deeper into the forest, you find a fork in the path. Do you take the left path or the right path?",
             options: [
-                { text: "Visit the marketplace", next: 'marketplace' },
-                { text: "Go to the town hall", next: 'town_hall' }
+                { text: "Take the left path", next: 'forest_left' },
+                { text: "Take the right path", next: 'forest_right' }
             ]
         },
-        cave: {
-            text: "Inside the cave, you find a hidden treasure chest. Do you open the chest or leave it alone?",
+        forest_left: {
+            text: "You encounter a magical creature. It offers you a choice: accept its help or continue on your own.",
             options: [
-                { text: "Open the chest", next: 'treasure' },
-                { text: "Leave it alone", next: 'cave_exit' }
+                { text: "Accept its help", next: 'forest_magic' },
+                { text: "Continue on your own", next: 'forest_alone' }
             ]
         },
-        deep_forest: {
-            text: "You wander deeper into the forest and get lost. The adventure ends here.",
-            options: []
+        forest_right: {
+            text: "You discover an ancient tree with a hidden message. Do you try to decode the message or ignore it?",
+            options: [
+                { text: "Decode the message", next: 'forest_message' },
+                { text: "Ignore it", next: 'forest_ignore' }
+            ]
         },
-        marketplace: {
-            text: "At the marketplace, you find various goods and friendly merchants. Your adventure here is enjoyable.",
-            options: []
+        // Story 2: The Haunted Castle
+        castle_start: {
+            text: "You arrive at a haunted castle. Do you enter or run away?",
+            options: [
+                { text: "Enter the castle", next: 'castle_entrance' },
+                { text: "Run away", next: 'start' }
+            ]
         },
-        town_hall: {
-            text: "At the town hall, you meet the mayor who offers you a quest. Your adventure here is just beginning.",
-            options: []
+        castle_entrance: {
+            text: "Inside the castle, you find two doors. One leads to the dungeons, and the other leads to the tower. Which one do you choose?",
+            options: [
+                { text: "Dungeons", next: 'castle_dungeons' },
+                { text: "Tower", next: 'castle_tower' }
+            ]
         },
-        treasure: {
-            text: "You find a treasure map inside the chest, leading to new adventures.",
-            options: []
+        castle_dungeons: {
+            text: "In the dungeons, you encounter a ghostly figure. Do you approach it or hide?",
+            options: [
+                { text: "Approach the figure", next: 'castle_ghost' },
+                { text: "Hide", next: 'castle_hide' }
+            ]
         },
-        cave_exit: {
-            text: "You leave the cave, having discovered nothing new.",
-            options: []
+        castle_tower: {
+            text: "At the top of the tower, you find a mysterious artifact. Do you take it or leave it?",
+            options: [
+                { text: "Take the artifact", next: 'castle_artifact' },
+                { text: "Leave it", next: 'castle_leave' }
+            ]
+        },
+        // Add stories for space, treasure, time, lab, city, dragon, underwater, desert
+        // Example for one more story
+        space_start: {
+            text: "You are in a spaceship orbiting a distant planet. Do you land on the planet or explore the space station?",
+            options: [
+                { text: "Land on the planet", next: 'space_planet' },
+                { text: "Explore the space station", next: 'space_station' }
+            ]
+        },
+        space_planet: {
+            text: "On the planet's surface, you discover an alien civilization. Do you make contact or return to your ship?",
+            options: [
+                { text: "Make contact", next: 'space_alien' },
+                { text: "Return to your ship", next: 'space_ship' }
+            ]
+        },
+        space_station: {
+            text: "In the space station, you find an advanced technology. Do you study it or leave it alone?",
+            options: [
+                { text: "Study the technology", next: 'space_technology' },
+                { text: "Leave it alone", next: 'space_leave' }
+            ]
+        },
+        // Complete other stories similarly
+        end: {
+            text: "The end of your adventure. Thank you for playing!",
+            options: [
+                { text: "Start over", next: 'start' }
+            ]
         }
     };
 
+    // Function to render a story segment
     function renderStory(part) {
         const story = storyData[part];
         if (!story) return;
 
-        storyContainer.innerHTML = `
-            <div class="story-text">${story.text}</div>
-            <div class="story-options">
-                ${story.options.map(option => `<button onclick="goTo('${option.next}')">${option.text}</button>`).join('')}
-            </div>
-        `;
+        storyContainer.classList.add('fade-out');
+
+        setTimeout(() => {
+            storyContainer.innerHTML = `
+                <div class="story-text">${story.text}</div>
+                <div class="story-options">
+                    ${story.options.map(option => `<button onclick="goTo('${option.next}')">${option.text}</button>`).join('')}
+                </div>
+            `;
+            storyContainer.classList.remove('fade-out');
+            storyContainer.classList.add('fade-in');
+        }, 500); // Duration of fade-out transition
     }
 
+    // Function to navigate to a different story segment
     window.goTo = function(part) {
         renderStory(part);
     };
